@@ -1,5 +1,7 @@
 # .files
 
+## Installation
+
 In order to use one of the configs available, you will have to clone the repo first:
 
 ```
@@ -15,6 +17,14 @@ ln -s "$(realpath ~/src/i3)" ~/.i3
 ```
 
 All you have to is change the relative path in ```$(realpath ~/rel/path/to/src/i3)``` accordingly.
+
+## Fonts
+
+The fonts I use are:
+
+* [Hack](https://sourcefoundry.org/hack/) (monospace)
+* [Oxygen](https://www.google.com/fonts/specimen/Oxygen) (sans-serif, similar to San Francisco & Segoe fonts)
+* [Font Awesome](http://fortawesome.github.io/Font-Awesome/) (icon font)
 
 ## Credits
 
