@@ -14,7 +14,7 @@ eg.
 ln -s "$(realpath ~/src/i3)" ~/.i3
 ```
 
-All you have to is change the relative path in ```$(realpath ~/rel/path/to/src/i3``` accordingly.
+All you have to is change the relative path in ```$(realpath ~/rel/path/to/src/i3)``` accordingly.
 
 ## Credits
 
