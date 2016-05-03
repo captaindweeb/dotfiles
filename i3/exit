@@ -1,0 +1,24 @@
+#!/bin/sh
+lock() {
+    $HOME/.i3/fortune-i3lock/lock
+}
+case "$1" in
+    suspend)
+        lock && systemctl suspend
+        ;;
+    hibernate)
+        lock && systemctl hibernate
+        ;;
+    reboot)
+        systemctl reboot
+        ;;
+    shutdown)
+        systemctl poweroff
+        ;;
+    *)
+        echo "Usage: $0 {suspend|hibernate|reboot|shutdown}"
+        exit 2
+esac
+
+exit 0
+
