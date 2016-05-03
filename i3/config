@@ -22,8 +22,8 @@
   set $workspace2 "2/ term"
   set $workspace3 "3/ chat"
   set $workspace4 "4/ email"
-  set $workspace5 "5/ misc"
-  set $workspace6 "6/ misc"
+  set $workspace5 "5/ tunes"
+  set $workspace6 "6/ files"
   set $workspace7 "7/ misc"
   set $workspace8 "8/ misc"
   set $workspace9 "9/ misc"
@@ -33,25 +33,21 @@
   set $monitor2 "HDMI-0"
 
 # General Configuration
-  font pango:Oxygen 10
+  font pango:Ubuntu 11
   floating_modifier $mod
-  hide_edge_borders both
-  new_window none
-  # smart_borders on
-  # gaps inner 0
-  # gaps outer 0
 
 # split in horizontal orientation
-bindsym $mod+h split h
+  bindsym $mod+h split h
 
 # split in vertical orientation
-bindsym $mod+v split v
+  bindsym $mod+v split v
 
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split 
+  bindsym $mod+s layout stacking
+  bindsym $mod+w layout tabbed
+  bindsym $mod+e layout toggle split 
+
 # Window-Related Bindings
   bindsym $mod+Shift+q kill
   bindsym $mod+Shift+h move left
@@ -63,29 +59,26 @@ bindsym $mod+e layout toggle split
   bindsym $mod+space focus mode_toggle
   bindsym $mod+r mode "  "
   mode "  " {
-    bindsym h resize shrink width 10 px or 10 ppt
-    bindsym j resize grow height 10 px or 10 ppt
-    bindsym k resize shrink height 10 px or 10 ppt
-    bindsym l resize grow width 10 px or 10 ppt
+    bindsym Right resize shrink width 10 px or 10 ppt
+    bindsym Up resize grow height 10 px or 10 ppt
+    bindsym Down resize shrink height 10 px or 10 ppt
+    bindsym Left resize grow width 10 px or 10 ppt
     bindsym Escape mode "default"
   }
 
-# alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+# alternatively, you can use the cursor keys
+  bindsym $mod+Left focus left
+  bindsym $mod+Down focus down
+  bindsym $mod+Up focus up
+  bindsym $mod+Right focus right
 
 # Restart-Related Bindings
   bindsym $mod+Shift+c reload
   bindsym $mod+Shift+r restart
 
 # Program-Related Bindings
-  bindsym $mod+Shift+f exec firefox
   bindsym $mod+Return exec i3-sensible-terminal
   bindsym $mod+d exec rofi -show run
-  # bindsym --release Print exec imgur-screenshot
-  bindsym $mod+Shift+e exec "i3-msg exit"
 
 # Volume & Media Bindings
   bindsym XF86AudioLowerVolume exec --no-startup-id pulseaudio-ctl down
@@ -119,8 +112,28 @@ bindsym $mod+Right focus right
   bindsym $mod+Shift+9 move container to workspace $workspace9
   bindsym $mod+Shift+0 move container to workspace $workspace10
 
-# Program Workspaces
+# Manage power state of the machine, a.k.a. system mode
+  set $mode_system System: (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
+  mode "$mode_system" {
+      bindsym s exec --no-startup-id "$HOME/.i3/exit suspend", mode "default"
+      bindsym h exec --no-startup-id "$HOME/.i3/exit hibernate", mode "default"
+      bindsym r exec --no-startup-id "$HOME/.i3/exit reboot", mode "default"
+      bindsym Shift+s exec --no-startup-id "$HOME/.i3/exit shutdown", mode "default"
+
+      bindsym Return mode "default"
+      bindsym Escape mode "default"
+
+  }
+  bindsym $mod+Shift+e exec "i3-msg exit" # logout
+  bindsym XF86Sleep mode "$mode_system"
+
+# Automatically Assign Programs to Workspaces
   assign [class="Firefox"] $workspace1
+  assign [class="chromium-browser"] $workspace1
+  assign [class="Pidgin"] $workspace3
+  assign [class="Thunderbird"] $workspace4
+  for_window [class="spotify"] move to workspace $workspace5
+  assign [class="Thunar"] $workspace6
 
 # Floating
   for_window [class="Lxappearance"] floating enable
@@ -137,17 +150,14 @@ bindsym $mod+Right focus right
 # Bar
   bar {
     font pango: Hack, FontAwesome 10
-    status_command i3status
+    status_command SCRIPT_DIR=~/.i3/scripts i3blocks -c ~/.i3/i3blocks.conf
     position top
-    # strip_workspace_numbers yes
-    #height 25
-    #bindsym button4 nop
-    #bindsym button5 nop
+
     colors {
       separator $base03
       background $base01
       statusline $base05
-#                        border  background text
+      #                  border  background text
       focused_workspace  $base01 $base01    $base07
       active_workspace   $base01 $base02    $base03
       inactive_workspace $base01 $base01    $base03
@@ -156,12 +166,14 @@ bindsym $mod+Right focus right
   }
 
 exec --no-startup-id i3-msg 'workspace $workspace1; exec /usr/bin/firefox'
-exec --no-startup-id i3-msg 'workspace $workspace2; exec /usr/bin/i3-sensible-terminal'
 exec --no-startup-id i3-msg 'workspace $workspace3; exec /usr/bin/pidgin'
 exec --no-startup-id i3-msg 'workspace $workspace4; exec /usr/bin/thunderbird'
 
-setxkbmap -layout us,gr
-setxkbmap -option 'grp:ctrl_alt_toggle'
-
+# Lock desktop shortcut
 bindsym $mod+Shift+x exec "$HOME/.i3/fortune-i3lock/lock"
 
+# Run autolock script
+exec --no-startup-id "$HOME/.i3/autolock"
+
+# Enable multiple keyboard layouts
+exec --no-startup-id "setxkbmap -model pc105 -layout us,gr -option grp:alt_shift_toggle"
